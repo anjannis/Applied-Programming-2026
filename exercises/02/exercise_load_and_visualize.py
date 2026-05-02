@@ -25,7 +25,7 @@ def load_emg_data(filename: str):
     """
 
     # TODO: load the pickle file with pandas
-    data = None
+    data = pd.read_pickle(filename)
 
     print("Data structure:")
     print("-" * 50)
@@ -38,10 +38,11 @@ def load_emg_data(filename: str):
     print("-" * 50)
 
     # TODO: extract the EMG signal
-    emg_signal = None
+    emg_signal = data["biosignal"]
 
     # TODO: extract the sampling rate
-    sampling_rate = None
+    sampling_rate = data["device_information"]["sampling_frequency"]
+
 
     print("\nEMG Signal information:")
     print("-" * 50)
@@ -63,10 +64,10 @@ def restructure_emg_data(emg_signal: np.ndarray):
     """
 
     # TODO: determine the number of channels
-    num_channels = None
+    num_channels = emg_signal.shape[0]
 
     # TODO: transpose and reshape so each row is one continuous channel
-    channel_data = None
+    channel_data = np.transpose(emg_signal, (0, 2, 1)).reshape(num_channels, -1)
 
     print("\nRestructured EMG Data:")
     print("-" * 50)
@@ -78,25 +79,23 @@ def restructure_emg_data(emg_signal: np.ndarray):
     return channel_data, num_channels
 
 
-def bandpass_filter_emg(
-    channel_data: np.ndarray,
-    sampling_rate: float,
-    low_cut: float = 20,
-    high_cut: float = 450,
-):
+def bandpass_filter_emg(channel_data: np.ndarray, sampling_rate: float, low_cut: float = 20, high_cut: float = 450,):
     """
     Apply a Butterworth bandpass filter to each channel.
     """
-
     # TODO: compute the Nyquist frequency
-    nyquist = None
+    nyquist = sampling_rate / 2
 
     # TODO: validate low_cut and high_cut
     # Raise ValueError if the frequencies are invalid.
+    if high_cut >= nyquist:
+        raise ValueError("high_cut must be below the Nyquist frequency")
+    if low_cut >= high_cut:
+        raise ValueError("low_cut must be below high_cut")
 
     # TODO: normalize the cutoff frequencies
-    low = None
-    high = None
+    low = low_cut / nyquist
+    high = high_cut / nyquist
 
     print("\nFilter Design Parameters:")
     print("-" * 50)
@@ -106,13 +105,14 @@ def bandpass_filter_emg(
     print(f"High cutoff: {high_cut} Hz ({high:.4f} normalized)")
 
     # TODO: design a 4th order Butterworth bandpass filter
-    b = None
-    a = None
+    a, b = signal.butter(4, [low, high], btype='bandpass')
 
     # TODO: pre-allocate filtered array
-    filtered_channels = None
+    filtered_channels = np.zeros(channel_data.shape)
 
     # TODO: apply filtfilt to every channel
+    for channel in range(channel_data.shape[0]):
+        filtered_channels[channel] = signal.filtfilt(b,a, channel_data[channel])
 
     print("\nFiltered Signal Information:")
     print("-" * 50)
@@ -129,16 +129,25 @@ def compute_rms(filtered_channels: np.ndarray, sampling_rate: float, window_ms: 
     """
 
     # TODO: convert window size from ms to samples
-    window_size = None
+    window_size = int(sampling_rate * (window_ms / 1000))
 
     # TODO: pre-allocate RMS array
-    rms_signals = None
+    rms_signals = np.zeros(filtered_channels.shape)
 
     # TODO: compute RMS for each channel
     # Hint:
     # 1. square the signal
     # 2. moving average with np.convolve(..., mode="same")
     # 3. square root
+    half_window = window_size // 2
+    for channel_index in range(len(filtered_channels)):
+        for i in range(len(filtered_channels[channel_index])):
+            start = max(0, i - half_window)
+            end = min(len(filtered_channels[channel_index]), i + half_window)
+            window = filtered_channels[channel_index][start:end]
+
+            rms_signals[channel_index, i] = np.mean(window**2)**0.5
+
 
     print("\nRMS Signal Information:")
     print("-" * 50)
@@ -183,7 +192,7 @@ def plot_emg_processing(
 
 def main():
     # TODO: get the filepath of the pkl file (Use / not \)
-    filename = "recording.pkl"
+    filename = '/Users/jannis/Documents/Uni auf MB/Applied-Programming-2026/recording.pkl'
 
     emg_signal, sampling_rate = load_emg_data(filename)
     channel_data, _ = restructure_emg_data(emg_signal)

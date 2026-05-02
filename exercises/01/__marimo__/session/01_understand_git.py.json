@@ -1,0 +1,83 @@
+{
+  "version": "1",
+  "metadata": {
+    "marimo_version": "0.23.1",
+    "script_metadata_hash": null
+  },
+  "cells": [
+    {
+      "id": "Hbol",
+      "code_hash": "146ddd757506bcb840448d69cc70ca2c",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "MJUe",
+      "code_hash": "df5d29a8f05e31bc13c8604b6f05db00",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "vblA",
+      "code_hash": "2cb584e8ce1347e7ae2916c1bebfdb70",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "bkHC",
+      "code_hash": "f34413113c39a11c8a6c2c6806a331fd",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "lEQa",
+      "code_hash": "bad5c8d8a1eb6e6236abce6e463d53bd",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "PKri",
+      "code_hash": "185200e9f4dae797d53d1801dbc2729e",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h2 id=\"5-remotes-working-with-others-eg-github-gitlab\">5. Remotes: Working with Others (e.g., GitHub, GitLab)</h2>\n<span class=\"paragraph\">Often, you'll want to store your repository online or collaborate with others. This involves <strong>remote</strong> repositories. A common remote name is <code>origin</code>, which usually refers to the main online repository (like the one on GitHub).</span>\n<span class=\"paragraph\"><strong>Key Commands:</strong></span>\n<ul>\n<li><code>git clone &lt;url&gt;</code>: Copies an existing remote repository to your local machine. This automatically sets up <code>origin</code>.</li>\n<li><code>git remote add &lt;n&gt; &lt;url&gt;</code>: Adds a connection to a remote repository (e.g., <code>git remote add origin https://github.com/user/repo.git</code>).</li>\n<li><code>git remote -v</code>: Lists your configured remotes.</li>\n<li><code>git fetch &lt;remote-name&gt;</code>: Downloads changes and commit history from the remote repository but <em>doesn't</em> automatically merge them into your local branches. It updates your \"remote-tracking branches\" (like <code>origin/main</code>).</li>\n<li><code>git pull &lt;remote-name&gt; &lt;branch-name&gt;</code>: Downloads changes <em>and</em> tries to merge them into your current local branch. It's roughly equivalent to <code>git fetch</code> followed by <code>git merge origin/main</code> (if you're pulling <code>main</code>).</li>\n<li><code>git push &lt;remote-name&gt; &lt;local-branch-name&gt;</code>: Uploads your local commits from <code>&lt;local-branch-name&gt;</code> to the corresponding branch on the remote repository.</li>\n</ul>\n<span class=\"paragraph\"><strong>Typical Workflow:</strong></span>\n<ol>\n<li><code>git pull origin main</code>: Get the latest changes from the remote <code>main</code> branch and merge them into your local <code>main</code>.</li>\n<li><code>git checkout -b my-new-feature</code>: Create and switch to a new branch.</li>\n<li><em>Work... <code>git add .</code>, <code>git commit -m \"...\"</code></em></li>\n<li><code>git checkout main</code></li>\n<li><code>git pull origin main</code>: (Optional, but good practice) Get any <em>new</em> changes from remote <code>main</code> again.</li>\n<li><code>git checkout my-new-feature</code></li>\n<li><code>git merge main</code> (or <code>git rebase main</code>): Integrate the latest <code>main</code> changes into your feature branch. Resolve any conflicts.</li>\n<li><em>Test...</em></li>\n<li><code>git checkout main</code></li>\n<li><code>git merge my-new-feature</code>: Merge your completed feature into <code>main</code>.</li>\n<li><code>git push origin main</code>: Upload your updated local <code>main</code> (including the merged feature) back to the remote repository.</li>\n</ol></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "Xref",
+      "code_hash": "dc66c6aa6197e95a9198df3f507008c4",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "SFPL",
+      "code_hash": "0730eba7af6310934227247a76853dea",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "BYtC",
+      "code_hash": "455afb7b126df9f0bba11351aabedf4c",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "RGSE",
+      "code_hash": "adbf4ccb506c42aa7df0ea7069c5ad15",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h2 id=\"keep-practicing\">Keep Practicing!</h2>\n<span class=\"paragraph\">This guide covers the fundamentals. The best way to learn Git is to use it!\nDon't be afraid to experiment (especially in branches). Use <code>git status</code> and\n<code>git log</code> often to understand what's happening. Good luck!</span></span>"
+          }
+        }
+      ],
+      "console": []
+    }
+  ]
+}
