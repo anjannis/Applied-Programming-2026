@@ -83,6 +83,8 @@ class EMGViewer(QMainWindow):
         # Set the window size to 1000 x 700
         # self.setWindowTitle(...)
         # self.resize(...)
+        self.setWindowTitle("EMG Signal Viewer")
+        self.resize(1000, 700)
 
         # Central widget
         # TODO 2:
@@ -90,6 +92,8 @@ class EMGViewer(QMainWindow):
         # Set it as the central widget of the main window
         # central_widget = ...
         # self.setCentralWidget(...)
+        central_widget = QWidget()
+        self.setCentralWidget(central_widget)
 
         # Layouts
         # TODO 3:
@@ -98,6 +102,8 @@ class EMGViewer(QMainWindow):
         # - a horizontal layout called controls_layout
         # main_layout = ...
         # controls_layout = ...
+        main_layout = QVBoxLayout(central_widget)
+        controls_layout = QHBoxLayout()
 
         # Channel selector
         # TODO 4:
@@ -105,8 +111,9 @@ class EMGViewer(QMainWindow):
         # - QLabel("Channel:")
         # - QComboBox()
         # Fill the combo box with "Channel 1", "Channel 2", ...
-        self.channel_label = None
-        self.channel_combo = None
+        self.channel_label = QLabel("Channel:")
+        self.channel_combo = QComboBox()
+        self.channel_combo.addItems([f"Channel {channel}" for channel in range(1, len(self.channel_data) + 1)])
 
         # Signal selector
         # TODO 5:
@@ -114,21 +121,28 @@ class EMGViewer(QMainWindow):
         # - QLabel("Signal:")
         # - QComboBox()
         # Add the items ["Original", "Filtered", "RMS"]
-        self.signal_label = None
-        self.signal_combo = None
+        self.signal_label = QLabel("Signal:")
+        self.signal_combo = QComboBox()
+        self.signal_combo.addItems(["Original", "Filtered", "RMS"])
 
         # Button: change color
         # TODO 6:
         # Create a QPushButton with the text "Change Color"
-        self.color_button = None
+        self.color_button = QPushButton("Change Color")
 
         # Add controls
         # TODO 7:
         # Add the widgets to controls_layout in this order:
         # channel_label, channel_combo, signal_label, signal_combo, color_button
+        controls_layout.addWidget(self.channel_label)
+        controls_layout.addWidget(self.channel_combo)
+        controls_layout.addWidget(self.signal_label)
+        controls_layout.addWidget(self.signal_combo)
+        controls_layout.addWidget(self.color_button)
 
         # TODO 8:
         # Add controls_layout to main_layout
+        main_layout.addLayout(controls_layout)
 
         # Matplotlib
         # TODO 9:
@@ -136,12 +150,13 @@ class EMGViewer(QMainWindow):
         # - a Figure with figsize=(8, 5)
         # - a FigureCanvas from that figure
         # - one subplot using add_subplot(111)
-        self.figure = None
-        self.canvas = None
-        self.ax = None
+        self.figure = Figure(figsize=(8,5))
+        self.canvas = FigureCanvas(self.figure)
+        self.ax = self.figure.add_subplot(111)
 
         # TODO 10:
         # Add the canvas to main_layout
+        main_layout.addWidget(self.canvas)
 
         # Connections
         # TODO 11:
@@ -149,9 +164,13 @@ class EMGViewer(QMainWindow):
         # - channel_combo.currentIndexChanged -> self.update_plot
         # - signal_combo.currentIndexChanged -> self.update_plot
         # - color_button.clicked -> self.change_color
+        self.channel_combo.currentIndexChanged.connect(self.update_plot)
+        self.signal_combo.currentIndexChanged.connect(self.update_plot)
+        self.color_button.clicked.connect(self.change_color)
 
         # TODO 12:
         # Call self.update_plot() once so an initial plot appears
+        self.update_plot()
 
     # ======================
     # Logic
@@ -192,7 +211,7 @@ class EMGViewer(QMainWindow):
 # ======================
 
 def main():
-    filename = "recording.pkl"
+    filename = "/Users/jannis/Documents/Uni auf MB/Applied-Programming-2026/recording.pkl"
 
     emg_signal, sampling_rate = load_emg_data(filename)
     channel_data = restructure_emg_data(emg_signal)
