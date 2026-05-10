@@ -112,7 +112,7 @@ def bandpass_filter_emg(channel_data: np.ndarray, sampling_rate: float, low_cut:
 
     # TODO: apply filtfilt to every channel
     for channel in range(channel_data.shape[0]):
-        filtered_channels[channel] = signal.filtfilt(b,a, channel_data[channel])
+        filtered_channels[channel] = signal.filtfilt(b, a, channel_data[channel])
 
     print("\nFiltered Signal Information:")
     print("-" * 50)
