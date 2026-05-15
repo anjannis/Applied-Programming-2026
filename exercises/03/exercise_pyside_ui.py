@@ -113,7 +113,7 @@ class EMGViewer(QMainWindow):
         # Fill the combo box with "Channel 1", "Channel 2", ...
         self.channel_label = QLabel("Channel:")
         self.channel_combo = QComboBox()
-        self.channel_combo.addItems([f"Channel {channel}" for channel in range(1, len(self.channel_data) + 1)])
+        self.channel_combo.addItems([f"Channel {i+1}" for i in range(self.channel_data.shape[0])])
 
         # Signal selector
         # TODO 5:
