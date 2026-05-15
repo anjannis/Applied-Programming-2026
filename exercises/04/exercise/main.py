@@ -11,14 +11,15 @@ def main():
 
     # TODO 1:
     # Create the ViewModel object.
-    view_model = None
+    view_model = MainViewModel()
 
     # TODO 2:
     # Create the MainView and pass the ViewModel into it.
-    view = None
+    view = MainView(view_model)
 
     # TODO 3:
     # Show the window.
+    view.show()
 
     sys.exit(app.exec())
 

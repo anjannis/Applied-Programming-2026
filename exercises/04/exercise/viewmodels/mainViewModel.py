@@ -16,19 +16,21 @@ class MainViewModel(QObject):
         # - duration=100
         # - window_size=5000
         # - step_size=20
-        self.model = None
+        self.model = SignalModel(sampling_rate=1000, duration=100, window_size=5000, step_size=20)
+
 
         # TODO 2:
         # Initialize:
         # - current_index
         # - is_plotting
-        self.current_index = None
-        self.is_plotting = None
+        self.current_index = 0
+        self.is_plotting = False
 
         # TODO 3:
         # Create a QTimer and connect its timeout signal
         # to self.update_plot
-        self.timer = None
+        self.timer = QTimer(self)
+        self.timer.timeout.connect(self.update_plot)
 
     def start_plotting(self):
         # TODO 4:
@@ -36,7 +38,9 @@ class MainViewModel(QObject):
         # Then:
         # - set is_plotting to True
         # - start the timer with an interval of 10 ms
-        pass
+        if not self.is_plotting:
+            self.is_plotting = True
+            self.timer.start(10)
 
     def stop_plotting(self):
         # TODO 5:
@@ -44,7 +48,9 @@ class MainViewModel(QObject):
         # Then:
         # - set is_plotting to False
         # - stop the timer
-        pass
+        if self.is_plotting:
+            self.is_plotting = False
+            self.timer.stop()
 
     def update_plot(self):
         if not self.model.has_enough_data(self.current_index):
